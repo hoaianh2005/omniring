@@ -1,0 +1,137 @@
+// To get started, press Ctrl+Space to bring up the completion menu and view the available nodes.
+
+// You can also use the buttons in the sidebar to perform actions on nodes.
+// Actions currently available include:
+
+// * Enabling / disabling the node
+// * Adding the bus to a bus
+// * Removing the node
+// * Connecting ADC channels
+
+// For more help, browse the DeviceTree documentation at https://docs.zephyrproject.org/latest/guides/dts/index.html
+// You can also visit the nRF DeviceTree extension documentation at https://docs.nordicsemi.com/bundle/nrf-connect-vscode/page/guides/ncs_configure_app.html#devicetree-support-in-the-extension
+
+&uart0{
+	status = "okay";
+	pinctrl-0 = <&uart0_default>;
+	pinctrl-1 = <&uart0_sleep>;
+	current-speed=<115200>;
+	pinctrl-names = "default", "sleep";
+};
+&uart1{
+	status = "okay";
+	pinctrl-0 = <&uart1_default>;
+	pinctrl-1 = <&uart1_sleep>;
+	current-speed=<115200>;
+	pinctrl-names = "default", "sleep";
+};
+&i2c0{
+ 	compatible = "nordic,nrf-twi";
+ 	status = "okay";
+	clock-frequency = <100000>;
+ 	pinctrl-0 = <&i2c0_default>;
+ 	pinctrl-1 = <&i2c0_sleep>;
+ 	pinctrl-names = "default", "sleep";
+
+	/*icm20948: icm20948@68 {
+		compatible = "i2c-device";
+		reg = <0x68>;
+		label = "icm_20948";
+	};*/
+
+	bmi270: bmi270@68 {
+		compatible = "i2c-device";
+		reg = <0x68>;
+	};
+
+
+	as7057: as7057@55 {
+		compatible = "i2c-device";
+		reg = <0x55>;
+		label = "as_7057";
+	};
+
+	lis2dux12: lis2dux12@18 {
+		compatible = "i2c-device";
+		reg = <0x18>;
+		label = "lis2";
+	};
+};
+
+&i2c1{
+ 	compatible = "nordic,nrf-twi";
+ 	status = "okay";
+	clock-frequency = <100000>;
+ 	pinctrl-0 = <&i2c1_default>;
+ 	pinctrl-1 = <&i2c1_sleep>;
+ 	pinctrl-names = "default", "sleep";
+
+	bq27220: bq27220@55 {
+		compatible = "i2c-device";
+		reg = <0x55>;
+		label = "bq_27220";
+	};
+};
+
+&gpio0{
+	status = "okay";
+};
+&gpio1{
+	status = "okay";
+};
+
+&gpiote{
+	status = "okay";
+};
+
+&pinctrl {
+
+	uart0_sleep: uart0_sleep {
+		group_uart_pin {
+			psels = <NRF_PSEL(UART_RX, 0, 8)>, <NRF_PSEL(UART_TX, 0, 6)>;
+			low-power-enable;
+		};
+	};
+
+	uart0_default: uart0_default {
+		group_uart_pin {
+			psels = <NRF_PSEL(UART_RX, 0, 8)>, <NRF_PSEL(UART_TX, 0, 6)>;
+		};
+	};
+
+	uart1_sleep: uart1_sleep {
+		group_uart_pin {
+			psels = <NRF_PSEL(UART_RX, 0, 14)>, <NRF_PSEL(UART_TX, 0, 17)>;
+			low-power-enable;
+		};
+	};
+
+	uart1_default: uart1_default {
+		group_uart_pin {
+			psels = <NRF_PSEL(UART_RX, 0, 14)>, <NRF_PSEL(UART_TX, 0, 17)>;
+		};
+	};
+
+	i2c0_default: i2c0_default {
+			group1 {
+				psels = < NRF_PSEL(TWIM_SDA, 0, 26) >, <NRF_PSEL(TWIM_SCL, 0, 27) >;
+			};
+		};
+	i2c0_sleep: i2c0_sleep {
+		group1 {
+			psels = <NRF_PSEL(TWIM_SDA, 0, 26) >, <NRF_PSEL(TWIM_SCL, 0, 27) >;
+			low-power-enable;
+		};
+	};
+	i2c1_default: i2c1_default {
+		group1 {
+			psels = < 0x18000c >, < 0x16000b >;
+		};
+	};
+	i2c1_sleep: i2c1_sleep {
+		group1 {
+			psels = < 0x18000c >, < 0x16000b >;
+			low-power-enable;
+		};
+	};
+};
